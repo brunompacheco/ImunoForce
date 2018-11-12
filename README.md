@@ -68,7 +68,7 @@ Have a good one! ^^
 
 ## How to compile at the command line
 ```
-gcc -Wall src/ImunoForce.c src/ImunoEngine.c src/AllegroDef.c src/Multiplayer.c -o imunoforce -lallegro -lallegro_image -lallegro_audio -lallegro_font -lallegro_primitives -lallegro_dialog -lallegro_acodec -lallegro_ttf
+gcc -Wall src/ImunoForce.c src/ImunoEngine.c src/AllegroDef.c src/Multiplayer.c -o imunoforce -lallegro -lallegro_image -lallegro_audio -lallegro_font -lallegro_primitives -lallegro_dialog -lallegro_acodec -lallegro_ttf -lm
 ```
 
 
