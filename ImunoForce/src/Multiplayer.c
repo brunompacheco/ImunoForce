@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include "Multiplayer.h"
 #include <allegro5/allegro.h>
+#include <sys/time.h>
+#include <errno.h>
 
 #ifdef __linux__
 #define SOCKET int
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR  -1
-#define WSAGetLastError() -6969
+#define WSAGetLastError() errno
 #endif
 
 SOCKET sckt;
