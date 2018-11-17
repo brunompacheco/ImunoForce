@@ -54,7 +54,7 @@ void data_deserialize(Data data[], unsigned char *buffer, GameVar *var){
 	}
 }
 
-void server_initialise() {
+void server_initialise(void) {
 	// Initialise winsock
 #ifndef __linux__
 	printf("Initialiasing Winsock...\n");
@@ -66,14 +66,20 @@ void server_initialise() {
 
 	printf("Initialised.\n");
 	struct timeval tv;
-
-	tv.tv_sec = 0;  /* 30 Secs Timeout */
-	tv.tv_usec = 100000;  // Not init'ing this can cause strange errors
+	
+	/* 100 ms Timeout */
+	tv.tv_sec = 0;  
+	tv.tv_usec = 100000;
+	
 	// Create a Socket
+	// AF_INET = IPv4; SOCK_DGRAM = datagram support (for UDP)
 	if ((sckt = socket(AF_INET, SOCK_DGRAM, 0)) == INVALID_SOCKET)
 		printf("socket() Error. Code: %d\n", WSAGetLastError());
 
-	setsockopt(sckt, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
+	// Set receive timeout to tv time
+	if (setsockopt(sckt, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(struct timeval))== -1)
+		printf("setsockopt() Error. Code: %d\n", WSAGetLastError());
+	
 	printf("Socket Created.\n");
 }
 
@@ -125,13 +131,13 @@ void d_send(Data* buffer, GameVar var) {
 	printf("d_send\n");
 }
 
-void set_server() {
+void set_server(void) {
 	// Prepare the sockaddr_in structure
 	server.sin_family = AF_INET;
-	server.sin_addr.s_addr = INADDR_ANY;
+	server.sin_addr.s_addr = INADDR_ANY; // INADDR_ANY = localhost
 	server.sin_port = htons(PORT);
 
-	// Bind
+	// Bind socket to address
 	if (bind(sckt, (struct sockaddr *)&server, sizeof(server)) == SOCKET_ERROR) {
 		printf("bind() Error. Code: %d\n", WSAGetLastError());
 		exit(EXIT_FAILURE);

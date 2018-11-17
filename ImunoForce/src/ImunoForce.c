@@ -90,25 +90,27 @@ int main(int argc, char *argv[]) {
 
 	ALLEGRO_BITMAP *cursor = al_load_bitmap("Sprites/Select.png");
 	ALLEGRO_BITMAP *menu = al_load_bitmap("Sprites/Menu 256color_2.png");
-	ALLEGRO_BITMAP *opening = al_load_bitmap("Sprites/Opening.png");
 
-	float alfa;
-	al_clear_to_color(al_map_rgb(255, 255, 255));
+	//	GameBean loading screen
+	// ALLEGRO_BITMAP *opening = al_load_bitmap("Sprites/Opening.png");
+	// float alfa;
+	
+	// al_clear_to_color(al_map_rgb(255, 255, 255));
 
-	for (alfa = 0.0001; alfa <= 1; alfa+=0.0003) {
-		al_draw_tinted_bitmap(opening, al_map_rgba_f(1,1,1, alfa), 0, 0, 0);
-		al_flip_display();
-		//al_rest(0.0002);
-	}
-	// PLAY SEGA SOUND
-	al_play_sample(sega_sound, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
-	al_rest(2);
+	// for (alfa = 0.0001; alfa <= 1; alfa+=0.003) {
+	// 	al_draw_tinted_bitmap(opening, al_map_rgba_f(1,1,1, alfa), 0, 0, 0);
+	// 	al_flip_display();
+	// 	//al_rest(0.0002);
+	// }
+	// // PLAY SEGA SOUND
+	// al_play_sample(sega_sound, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
+	// al_rest(2);
 
-	for (alfa = 1; alfa >= 0; alfa-=0.0003) {
-		//al_rest(0.0002);
-		al_draw_tinted_bitmap(opening, al_map_rgba_f(1,1,1, alfa), 0, 0, 0);
-		al_flip_display();
-	}
+	// for (alfa = 1; alfa >= 0; alfa-=0.003) {
+	// 	//al_rest(0.0002);
+	// 	al_draw_tinted_bitmap(opening, al_map_rgba_f(1,1,1, alfa), 0, 0, 0);
+	// 	al_flip_display();
+	// }
 
 //Start loading screen
 	float l_pctg;

@@ -33,12 +33,12 @@ typedef struct {
 	unsigned char dna;
 }GameVar;
 
-void server_initialise();
-void r_receive();
-void r_send();
+void server_initialise(void);
+void r_receive(bool keys[]);
+void r_send(bool keys[]);
 void d_receive(Data *,GameVar *);
 void d_send(Data *,GameVar);
-void set_server();
-void set_client();
+void set_server(void);
+void set_client(char ip[]);
 void data_serialize(Data *, unsigned char *, GameVar);
 void data_deserialize(Data *, unsigned char *, GameVar *);
