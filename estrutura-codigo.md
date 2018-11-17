@@ -1,6 +1,6 @@
-#Estrutura geral do código
+# Estrutura geral do código
 
-##ImunoForce
+## ImunoForce
 Neste arquivo está organizado o *loop* geral do jogo, assim como todas as variáveis necessárias a seu funcionamento. Também pode ser encontrado a declaração de todos os sprites assim como suas máscaras correspondentes. Além disso ele está dividido no loop em verificação de eventos e suas consequencias e, caso a lista esteja vazia, no desenho do menu e do jogo em si. O menu é dividido em SINGLE-PLAYER, MULTI-PLAYER, UPGRADES e QUIT:
 
 * SINGLE-PLAYER: Onde são executadas as operações vitais para o desenrolar do jogo.
@@ -13,28 +13,28 @@ Neste arquivo está organizado o *loop* geral do jogo, assim como todas as vari�
  * BULLET: Seu aprimoramento resulta na adição de projéteis lançados por disparo
 * QUIT: Usado para sair do jogo
 
-##AllegroDef
+## AllegroDef
 
 Neste se localizam as definições necessárias as bibliotecas e também suas inicializações, com as devidas mensagens de erro caso necessário seja.
 
-##Multiplayer
+## Multiplayer
 
 Nesta seção podem ser encontradas as funções e definições necessárias para a troca de pacotes via protocolo UDP entre *server* e *client*, bem como as devidas bibliotecas.
 
-##ImunoEngine
+## ImunoEngine
 
 Como o nome sugere, o ImunoEngine terá todas as funções principais de renderização, movimentação, colisão além de funções de suporte para a criação de objetos.
 
 ## struct Object
 Object é a estrutura que define quase tudo que existe no jogo, de personagens a projéteis e até o background são Objects. Esta estrutura possui todos os atributos necessários para movimentação, animação, desenho e colisão (os últimos 3 tratados por índices referentes a uma array), além de ser organizada como uma lista duplamente encadeada, onde cada object possui um atributo que é o endereço para a estrutura seguinte (que foi declarada após ele) e a anterior (que foi declarada antes). Por este motivo se faz necessário a existencia de um *header*, que é um Object que não possui nenhuma utilidade aparente ao usuário, usado apenas como referência. Este método de duplo encadeamento das estruturas se dá muito útil uma vez que não é necessário o armazenamento de uma variável para cada Object, visto que é possível iterar entre todos eles através de seus atributos de endereços, e distinguilos através de seus atributos de tipo.
 
-#Estrutura de Arquivos
+# Estrutura de Arquivos
 
-##Arquivos de Código
+## Arquivos de Código
 O código fonte está localizado na pasta ImunoForce\src, são os arquivos ImunoForce.c, ImunoEngine.h & .c, AllegroDef.h & .c e Multiplayer.h & .c
 
-##Arquivos de Áudio
+## Arquivos de Áudio
 Os arquivos de áudio utilizados no jogo estão localizados na pasta ImunoForce\Sounds
 
-##Imagens
+## Imagens
 As imagens imagens utilizadas no jogo estão localizadas na pasta ImunoForce\Sprites. Suas fontes, isto é, seus arquivos modificáveis estão localizados no formato .PSD na pasta SpritesPSDs
