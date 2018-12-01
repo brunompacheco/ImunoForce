@@ -8,6 +8,7 @@ int main(int argc, char *argv[]) {
     char ip[12];
     bool keys[] = {0, 1, 0, 1, 0, 1, 1, 1, 0};
     char msg[98];
+	memset(msg, 0, sizeof(char)*98);
     char seqnum = 1;
 
 
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]) {
             // r_send(keys);
             // r_receive(keys);
 
-            strcpy(msg, "asdfasdfasdf");
+            strcpy(msg, argv[4]);
 
             safe_send(seqnum, msg, 98);
 
