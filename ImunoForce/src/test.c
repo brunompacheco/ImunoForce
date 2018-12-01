@@ -17,16 +17,19 @@ int main(int argc, char *argv[]) {
         case 's': // Server
             set_server();
 
-
             // r_receive(keys);
             // sleep(1);
             // r_send(keys);
+            
+            seqnum = 10;
             safe_receive(seqnum, msg, 98);
+            
 
             break;
 
         case 'c': // Client
             strcpy(ip, argv[2]);
+            seqnum = atoi(argv[3]);
 
             printf("ip: %s\n", ip);
 
