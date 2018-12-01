@@ -104,40 +104,54 @@ void safe_send(char seqnum, char* msg, int msg_len) {
 	printf("\tchecksum: %d\n", data[1]);
 	printf("\tmessage: %s\n", msg);
 
-	data[0] = -1;
-	while (data[0] != seqnum) {
-		if ((recv_len = recvfrom(sckt, data, sizeof(char), 0, (struct sockaddr*) &si_other, &slen)) >= 0) {
-			printf("ACK seqnum: %d\n", data[0]);
+	// Checks if it has the acknowledged 
+	bool ack = false;
+
+	if ((recv_len = recvfrom(sckt, &ack, sizeof(bool), 0, (struct sockaddr*) &si_other, &slen)) >= 0) {
+		if (ack) {
+			printf("ACK received\n");
 		} else {
-			printf("ack reception failed. Error: %d\n", WSAGetLastError());
+			printf("NACK received\n");
 		}
+	} else {
+		printf("ack reception failed. Error: %d\n", WSAGetLastError());
 	}
 }
 
 void safe_receive(char seqnum, char* msg, int msg_len) {
-	fflush(stdout);
+	bool got = false;
+	char rec_seqnum = -1;
 	int i;
+	
+	fflush(stdout);
 	memset(msg, '\0', sizeof(char)*msg_len);
 
 	char data[100];
 
-	if ((recv_len = recvfrom(sckt, data, sizeof(char)*100, 0, (struct sockaddr*) &si_other, &slen)) >= 0) {
-		seqnum = data[0];
-		strcpy(msg, &(data[2]));
+	while(got == false) { // Runs untill it receives the correct package
+		if ((recv_len = recvfrom(sckt, data, sizeof(char)*100, 0, (struct sockaddr*) &si_other, &slen)) >= 0) {
+			rec_seqnum = data[0];
+			strcpy(msg, &(data[2]));
 
-		printf("Data received\n");
-		printf("\tseqnum: %d\n", seqnum);
-		printf("\tchecksum: %d\n", data[1]);
-		printf("\tmessage: %s\n", msg);
+			printf("Data received\n");
+			printf("\tseqnum: %d\n", rec_seqnum);
+			printf("\tchecksum: %d\n", data[1]);
+			printf("\tmessage: %s\n", msg);
 
-		ack(seqnum);
-	}else{
-		printf("safe_receive failed. Error: %d\n", WSAGetLastError());
+			if (rec_seqnum == seqnum) {	// Checks if package's seqnum matches the expected
+				ack(true); 	// ACK
+				got = true;
+			} else {
+				ack(false);	// NACK
+			}
+		}else{
+			printf("safe_receive failed. Error: %d\n", WSAGetLastError());
+		}
 	}
 }
 
-void ack(char seqnum) {
-	if (sendto(sckt, &seqnum, sizeof(char), 0, (struct sockaddr*) &si_other, slen) == SOCKET_ERROR) {
+void ack(bool ack) {
+	if (sendto(sckt, &ack, sizeof(bool), 0, (struct sockaddr*) &si_other, slen) == SOCKET_ERROR) {
 		printf("ack failed. Error: %d\n", WSAGetLastError());
 		//exit(EXIT_FAILURE);
 	}
