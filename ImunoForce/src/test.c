@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+
 #include "Multiplayer.h"
 
 int main(int argc, char *argv[]) {
@@ -17,8 +19,11 @@ int main(int argc, char *argv[]) {
             break;
 
         case 'c': // Client
-            printf("ip: ");
-            scanf("%s", ip);
+            strcpy(ip, argv[2]);
+
+            printf("ip: %s\n", ip);
+
+            // scanf("%s", ip);
             
             set_client(ip);
 
