@@ -68,7 +68,7 @@ void server_initialise(void) {
 	struct timeval tv;
 	
 	/* 100 ms Timeout */
-	tv.tv_sec = 0;  
+	tv.tv_sec = 10;  
 	tv.tv_usec = 100000;
 	
 	// Create a Socket
@@ -96,7 +96,12 @@ void r_receive(bool keys[]) {
 		}
 		printf("r_receive failed. Error: %d\n", WSAGetLastError());
 	}
-	printf("r_receive\n");
+
+	printf("r_receive - ");
+	for (int i=0;i<9;i++) {
+		printf("%d", keys[i]);
+	}
+	printf("\n");
 }
 
 void r_send(bool keys[]) {
@@ -105,7 +110,12 @@ void r_send(bool keys[]) {
 		printf("r_send failed. Error: %d\n", WSAGetLastError());
 		//exit(EXIT_FAILURE);
 	}
-	printf("r_send");
+	
+	printf("r_send - ");
+	for (int i=0;i<9;i++) {
+		printf("%d", keys[i]);
+	}
+	printf("\n");
 }
 
 void d_receive(Data buffer[], GameVar *var) {
