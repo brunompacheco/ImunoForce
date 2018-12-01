@@ -88,7 +88,7 @@ void safe_send(char seqnum, char* msg, int msg_len) {
 	char ack_seqnum = -1;
 
 	data[0] = seqnum;
-	data[1] = 10;
+	data[1] = checksum(msg, msg_len);
 
 	strcpy(data+2, msg); // TO-DO: add msg_len verification
 
@@ -138,7 +138,13 @@ void safe_receive(char seqnum, char* msg, int msg_len) {
 			printf("\tchecksum: %d\n", data[1]);
 			printf("\tmessage: %s\n", msg);
 
-			if (rec_seqnum == seqnum) {	// Checks if package's seqnum matches the expected
+			char sum=0;
+			for (int i=0;i<msg_len;i++) { 
+				sum += msg[i];
+			}
+			// printf("\tsum: %d\n", sum);
+
+			if ((rec_seqnum == seqnum) && (~(sum+data[1]) == 0)) {	// Checks if package's seqnum matches the expected and checksums
 				ack(true); 	// ACK
 				got = true;
 			} else {
@@ -155,6 +161,18 @@ void ack(bool ack) {
 		printf("ack failed. Error: %d\n", WSAGetLastError());
 		//exit(EXIT_FAILURE);
 	}
+}
+
+char checksum(char* msg, int msg_len) {
+	char chksum = 0;
+
+	for (int i=0;i<msg_len;i++) {
+		chksum += msg[i];
+	}
+
+	chksum = ~chksum;
+
+	return chksum;
 }
 
 void r_receive(bool keys[]) {

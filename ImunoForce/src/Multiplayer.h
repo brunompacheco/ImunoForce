@@ -38,6 +38,7 @@ void server_initialise(void);
 void safe_send(char seqnum, char* msg, int msg_len);
 void safe_receive(char seqnum, char* msg, int msg_len);
 void ack(bool ack);
+char checksum(char* msg, int msg_len);
 
 void r_receive(bool keys[]);
 void r_send(bool keys[]);
