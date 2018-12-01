@@ -14,7 +14,7 @@
 
 #define SERVER "172.16.104.163"		//ip address of udp server
 #define BUFLEN	1500	// Buffer length in bytes
-#define PORT	21234
+#define PORT	21236
 #define DATA_SIZE 7
 #define DATA_LENGHT (BUFLEN/DATA_SIZE)
 
@@ -34,6 +34,11 @@ typedef struct {
 }GameVar;
 
 void server_initialise(void);
+
+void safe_send(char seqnum, char* msg, int msg_len);
+void safe_receive(char seqnum, char* msg, int msg_len);
+void ack(char seqnum);
+
 void r_receive(bool keys[]);
 void r_send(bool keys[]);
 void d_receive(Data *,GameVar *);

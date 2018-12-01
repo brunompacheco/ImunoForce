@@ -83,6 +83,66 @@ void server_initialise(void) {
 	printf("Socket Created.\n");
 }
 
+void safe_send(char seqnum, char* msg, int msg_len) {
+	char data[100];
+	char ack_seqnum = -1;
+
+	data[0] = seqnum;
+	data[1] = 10;
+
+	strcpy(data+2, msg); // TO-DO: add msg_len verification
+
+	if (sendto(sckt, data, sizeof(char)*100, 0, (struct sockaddr*) &si_other, slen) == SOCKET_ERROR) {
+		printf("safe_send failed. Error: %d\n", WSAGetLastError());
+		//exit(EXIT_FAILURE);
+
+		return 0;
+	}
+	
+	printf("Data sent\n");
+	printf("\tseqnum: %d\n", data[0]);
+	printf("\tchecksum: %d\n", data[1]);
+	printf("\tmessage: %s\n", msg);
+
+	data[0] = -1;
+	while (data[0] != seqnum) {
+		if ((recv_len = recvfrom(sckt, data, sizeof(char), 0, (struct sockaddr*) &si_other, &slen)) >= 0) {
+			printf("ACK seqnum: %d\n", data[0]);
+		} else {
+			printf("ack reception failed. Error: %d\n", WSAGetLastError());
+		}
+	}
+}
+
+void safe_receive(char seqnum, char* msg, int msg_len) {
+	fflush(stdout);
+	int i;
+	memset(msg, '\0', sizeof(char)*msg_len);
+
+	char data[100];
+
+	if ((recv_len = recvfrom(sckt, data, sizeof(char)*100, 0, (struct sockaddr*) &si_other, &slen)) >= 0) {
+		seqnum = data[0];
+		strcpy(msg, &(data[2]));
+
+		printf("Data received\n");
+		printf("\tseqnum: %d\n", seqnum);
+		printf("\tchecksum: %d\n", data[1]);
+		printf("\tmessage: %s\n", msg);
+
+		ack(seqnum);
+	}else{
+		printf("safe_receive failed. Error: %d\n", WSAGetLastError());
+	}
+}
+
+void ack(char seqnum) {
+	if (sendto(sckt, &seqnum, sizeof(char), 0, (struct sockaddr*) &si_other, slen) == SOCKET_ERROR) {
+		printf("ack failed. Error: %d\n", WSAGetLastError());
+		//exit(EXIT_FAILURE);
+	}
+}
+
 void r_receive(bool keys[]) {
 	fflush(stdout);
 	int i;
@@ -125,7 +185,6 @@ void d_receive(Data buffer[], GameVar *var) {
 	//memset(buffer, '\0', BUFLEN);
 	if (recvfrom(sckt, d, BUFLEN, 0, (struct sockaddr *) &si_other, &slen) >= 0) { // Receive data
 		data_deserialize(buffer, d, var);
-
 	}else{
 		printf("d_receive failed. Error: %d\n", WSAGetLastError());
 	}

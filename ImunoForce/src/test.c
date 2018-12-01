@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "Multiplayer.h"
@@ -6,6 +7,9 @@
 int main(int argc, char *argv[]) {
     char ip[12];
     bool keys[] = {0, 1, 0, 1, 0, 1, 1, 1, 0};
+    char msg[98];
+    char seqnum = 1;
+
 
     server_initialise();
 
@@ -14,7 +18,10 @@ int main(int argc, char *argv[]) {
             set_server();
 
 
-            r_receive(keys);
+            // r_receive(keys);
+            // sleep(1);
+            // r_send(keys);
+            safe_receive(seqnum, msg, 98);
 
             break;
 
@@ -27,9 +34,12 @@ int main(int argc, char *argv[]) {
             
             set_client(ip);
 
-            // keys = {0, 1, 0, 1, 0, 1, 0, 1, 0};
+            // r_send(keys);
+            // r_receive(keys);
 
-            r_send(keys);
+            strcpy(msg, "asdfasdfasdf");
+
+            safe_send(seqnum, msg, 98);
 
             break;
 
